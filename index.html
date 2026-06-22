@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+<style>
+    .body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+        width: 90vw;
+        background-color: #CFD186;
+    }
+
+    .back-cover {
+        width: 501px;
+        height: 501px;
+        margin: 0px;
+        padding: 0px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0px;
+        color: black;
+        font-size: 5rem;
+        font-weight: 900;
+    }
+
+    button {
+        height: 167px;
+        width: 167px;
+        padding: 0px;
+        margin: 0px;
+        border: none;
+        background-color: #CFD186;
+        font-size: 7rem;
+        color: #52414C;
+    }
+
+    #box-0 {
+        border-right: 4px solid green;
+        border-bottom: 4px solid green;
+    }
+
+    #box-1 {
+        border-right: 4px solid green;
+        border-left: 4px solid green;
+        border-bottom: 4px solid green;
+    }
+
+    #box-2 {
+        border-left: 4px solid green;
+        border-bottom: 4px solid green;
+    }
+
+    #box-3 {
+        border-right: 4px solid green;
+        border-bottom: 4px solid green;
+        border-top: 4px solid green;
+    }
+
+    #box-4 {
+        border: 4px solid green;
+    }
+
+    #box-5 {
+        border-bottom: 4px solid green;
+        border-top: 4px solid green;
+        border-left: 4px solid green;
+    }
+
+    #box-6 {
+        border-top: 4px solid green;
+        border-right: 4px solid green;
+    }
+
+    #box-7 {
+        border-right: 4px solid green;
+        border-top: 4px solid green;
+        border-left: 4px solid green;
+    }
+
+    #box-8 {
+        border-top: 4px solid green;
+        border-left: 4px solid green
+    }
+
+    #reset-btn {
+        font-size: 2rem;
+        background-color: #52414C;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        height: 60px;
+        width: 200px;
+        margin: 40px;
+    }
+
+
+
+    button:active {
+        background-color: #CFD186;
+    }
+
+    button:hover {
+        background-color: #E3655B;
+    }
+
+    #reset-btn:hover {
+        background-color: #596157;
+    }
+
+    #reset-btn:active {
+        background-color: #52414C;
+    }
+
+    .animation {
+        animation: animation 200ms forwards;
+    }
+
+    @keyframes animation {
+        0% {
+            background-color: #CFD186;
+        }
+
+        50% {
+            border-radius: 50%;
+            height: 167px;
+            width: 167px;
+        }
+
+        100% {
+            background-color: #CFD186;
+        }
+    }
+</style>
+
+<body class="body">
+    <h1>TIC-TAC-TOE</h1><br>
+    <div class="back-cover">
+        <button class="box" id="box-0"></button>
+        <button class="box" id="box-1"></button>
+        <button class="box" id="box-2"></button>
+        <button class="box" id="box-3"></button>
+        <button class="box" id="box-4"></button>
+        <button class="box" id="box-5"></button>
+        <button class="box" id="box-6"></button>
+        <button class="box" id="box-7"></button>
+        <button class="box" id="box-8"></button>
+
+
+    </div>
+    <div>
+        <button id="reset-btn">RESET</button>
+    </div>
+
+
+    <script>
+        let buttons = document.querySelectorAll(".box");
+        let resetBtn = document.querySelector("#reset-btn");
+        let body = document.querySelector("body")
+        const winPatterns = [
+            [0, 1, 2],
+            [0, 3, 6],
+            [0, 4, 8],
+            [1, 4, 7],
+            [2, 5, 8],
+            [2, 4, 6],
+            [3, 4, 5],
+            [6, 7, 8],
+        ];
+
+
+        let turnx = true;
+
+        buttons.forEach((box) => {
+            box.addEventListener("click", () => {
+
+                if (turnx) {
+                    box.innerText = "X";
+                    console.log(turnx);
+                    turnx = false;
+
+                } else {
+                    box.innerText = "O";
+                    console.log(turnx);
+                    turnx = true;
+                }
+                box.disabled = true;
+
+                checkWinner();
+            });
+        });
+        checkWinner = () => {
+            for (pattern of winPatterns) {
+                console.log(pattern[0], pattern[1], pattern[2]);
+                console.log(buttons[pattern[0]].innerText, buttons[pattern[1]].innerText, buttons[pattern[2]].innerText);
+                if (buttons[pattern[0]].innerText === "X" && buttons[pattern[1]].innerText === "X" && buttons[pattern[2]].innerText === "X") {
+                    alert("Player-X Wins, Tap Reset");
+                    buttons.forEach((box) => {
+                        box.innerText = "";
+                        box.disabled = true;
+                    });
+                    break
+                } if (buttons[pattern[0]].innerText === "O" && buttons[pattern[1]].innerText === "O" && buttons[pattern[2]].innerText === "O") {
+                    alert("Player-O Wins, Tap Reset");
+                    buttons.forEach((box) => {
+                        box.innerText = "";
+                        box.disabled = true;
+                    });
+                    break
+                }
+
+            }
+        }
+
+        resetBtn.addEventListener("click", () => {
+            buttons.forEach((box) => {
+                box.innerText = "";
+                box.disabled = false;
+            });
+        });
+
+        let allButton = document.querySelectorAll(".box")
+        resetBtn.addEventListener("click", () => {
+            allButton.forEach((but) => {
+                but.classList.remove("animation");
+                void but.offsetWidth;
+                but.classList.add("animation");
+            });
+        });
+    </script>
+</body>
+
+</html>
