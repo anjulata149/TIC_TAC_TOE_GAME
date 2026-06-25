@@ -8,7 +8,7 @@
 
 </head>
 <style>
-    * {
+   * {
     padding: 0;
     margin: 0;
 }
@@ -21,6 +21,7 @@
     height: 100vh;
     width: 100vw;
     background-color: #CFD186;
+
 }
 
 .back-cover {
@@ -111,6 +112,7 @@ button {
     width: 200px;
     margin: 40px;
 }
+
 button:active {
     background-color: #CFD186;
 }
@@ -135,18 +137,20 @@ button:hover {
     0% {
         background-color: #CFD186;
     }
+
     50% {
         border-radius: 50%;
         height: 167px;
         width: 167px;
     }
+
     100% {
         background-color: #CFD186;
     }
 }
 
 #draw {
-    height: 200px;
+    height: 230px;
     width: 80vw;
     border: #596157 15px solid;
     border-radius: 15px;
@@ -164,6 +168,26 @@ button:hover {
     flex-direction: column;
 }
 
+.winmessage {
+    height: 230px;
+    width: 80vw;
+    border: #596157 15px solid;
+    border-radius: 15px;
+    text-shadow: 0 20px 10px #a34841;
+    background-color: #d9dd60;
+    color: #52414C;
+    font-family: algerian, Helvetica, sans-serif;
+    padding-top: 20px;
+    font-size: 2rem;
+    text-align: center;
+    align-items: center;
+    position: fixed;
+    top: 300px;
+    display: flex;
+    flex-direction: column;
+
+}
+
 .hidden {
     visibility: hidden;
 }
@@ -178,10 +202,25 @@ button:hover {
     height: 60px;
     width: 200px;
     margin: 40px;
+    /* position: fixed;
+    z-index: 2; */
+}
+
+.newGamebtn2 {
+    font-size: 2rem;
+    padding: 5px;
+    background-color: #52414C;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    height: 60px;
+    width: 200px;
+    margin: 40px;
 
 }
 
-.newGamebtn:active {
+.newGamebtn:active,
+.newGamebtn2:active {
     background-color: #52414C;
 }
 
@@ -191,11 +230,13 @@ button:hover {
         width: 83.5px;
         font-size: 4.8rem;
     }
+
     h1 {
         font-weight: 900;
         height: 80px;
         font-size: 30px;
     }
+
     #reset-btn {
         font-size: 1.8rem;
         background-color: #52414C;
@@ -206,41 +247,48 @@ button:hover {
         width: 200px;
         margin: 40px;
     }
+
     .back-cover {
         width: 250.5px;
         height: 250.5px;
     }
-} 
+}
 </style>
-    
-<body class="body">
-    <h1 >TICK-TAC-TOE</h1><br>
-    <div class="back-cover">
-        <button class="box" id="box-0" ></button>
-        <button class="box" id="box-1" ></button>
-        <button class="box" id="box-2" ></button>
-        <button class="box" id="box-3" ></button>
-        <button class="box" id="box-4" ></button>
-        <button class="box" id="box-5" ></button>
-        <button class="box" id="box-6" ></button>
-        <button class="box" id="box-7" ></button>
-        <button class="box" id="box-8" ></button>
 
-        
+<body class="body">
+    <h1>TICK-TAC-TOE</h1><br>
+    <div class="back-cover">
+        <button class="box" id="box-0"></button>
+        <button class="box" id="box-1"></button>
+        <button class="box" id="box-2"></button>
+        <button class="box" id="box-3"></button>
+        <button class="box" id="box-4"></button>
+        <button class="box" id="box-5"></button>
+        <button class="box" id="box-6"></button>
+        <button class="box" id="box-7"></button>
+        <button class="box" id="box-8"></button>
+
+
+
     </div>
     <div>
         <button id="reset-btn">RESET</button>
     </div>
-    <div class="message hidden" id="draw" >
+    <div class="message hidden" id="draw">
         DRAW
-        <button class="newGamebtn">New Game</button>
+        <button class="newGamebtn hidden">New Game</button>
     </div>
+    <div class="winmessage hidden" id="winner">
+        you win
+        <button class="newGamebtn2">New Game</button>
 
-    
+    </div>
 <script>
-    let buttons = document.querySelectorAll(".box");
+  let buttons = document.querySelectorAll(".box");
 let resetBtn = document.querySelector("#reset-btn");
-let body = document.querySelector("body")
+let body = document.querySelector("body");
+const winmessage = document.querySelector(".winmessage");
+const newGamebtn = document.querySelector(".newGamebtn");
 const winPatterns = [
     [0, 1, 2],
     [0, 3, 6],
@@ -251,12 +299,9 @@ const winPatterns = [
     [3, 4, 5],
     [6, 7, 8],
 ];
-
-
 let turnx = true;
 let moves = 0;
 let draw = document.querySelector("#draw");
-let newGamebtn = document.querySelector(".newGamebtn")
 
 buttons.forEach((box) => {
     box.addEventListener("click", () => {
@@ -265,7 +310,6 @@ buttons.forEach((box) => {
             if (turnx) {
                 box.innerText = "X";
                 turnx = false;
-
             }
             else {
                 box.innerText = "O";
@@ -274,52 +318,63 @@ buttons.forEach((box) => {
         }
         else {
             draw.classList.toggle("hidden");
+            newGamebtn.classList.toggle("hidden");
         }
-
         box.disabled = true;
-        console.log(moves)
-
         checkWinner();
     });
 });
-newGamebtn.addEventListener("click", () => {
-    buttons.forEach((box) => {
-        moves=0;
-        box.innerText = "";
-        box.disabled = false;
-        draw.classList.toggle("hidden");
-    })
-})
+
 checkWinner = () => {
     for (pattern of winPatterns) {
         if (buttons[pattern[0]].innerText === "X" && buttons[pattern[1]].innerText === "X" && buttons[pattern[2]].innerText === "X") {
-            alert("CNGRATULATIONS, Player-X Wins !!!, Tap Reset");
-            moves=0;
+            winmessage.innerHTML = "CONGRATULATIONS,\n Player-X wins! <button class='newGamebtn2'>New Game</button>"
+            winmessage.classList.toggle("hidden");
+            let newGamebtn2 = document.querySelector(".newGamebtn2")
+            newGamebtn2.addEventListener("click", () => {
+                buttons.forEach((box) => {
+                    moves = 0;
+                    box.innerText = "";
+                    box.disabled = false;
+                    winmessage.classList.toggle("hidden");
+                })
+            })
+
+            moves = 0;
             buttons.forEach((box) => {
                 box.innerText = "";
                 box.disabled = true;
             });
             break
         } if (buttons[pattern[0]].innerText === "O" && buttons[pattern[1]].innerText === "O" && buttons[pattern[2]].innerText === "O") {
-            moves=0;
-            alert("CNGRATULATIONS, Player-O Wins !!!, Tap Reset");
+            moves = 0;
+            winmessage.innerHTML = "CONGRATULATIONS,\n Player-O wins! <button class='newGamebtn2'>New Game</button>"
+            winmessage.classList.toggle("hidden")
+            let newGamebtn2 = document.querySelector(".newGamebtn2")
+            newGamebtn2.addEventListener("click", () => {
+                buttons.forEach((box) => {
+                    moves = 0;
+                    box.innerText = "";
+                    box.disabled = false;
+                    winmessage.classList.toggle("hidden");
+
+                })
+
+            })
             buttons.forEach((box) => {
                 box.innerText = "";
                 box.disabled = true;
             });
-            break
+              break
         }
-
     }
 }
-
 resetBtn.addEventListener("click", () => {
     buttons.forEach((box) => {
         box.innerText = "";
         box.disabled = false;
     });
 });
-
 let allButton = document.querySelectorAll(".box")
 resetBtn.addEventListener("click", () => {
     allButton.forEach((but) => {
@@ -329,9 +384,19 @@ resetBtn.addEventListener("click", () => {
     });
 
 });
+newGamebtn.addEventListener("click", () => {
+    buttons.forEach((box) => {
+        moves = 0;
+        box.innerText = "";
+        box.disabled = false;
+        draw.classList.toggle("hidden");
+        newGamebtn.classList.toggle("hidden")
+    });
+});
+const newGamebtn2 = document.querySelector(".newGamebtn2")
 
 
-        
+
 </script>
 </body>
 
